@@ -8,6 +8,8 @@ public class PersonDto {
     private String name;
     @NotNull
     private Integer age;
+    @NotNull(groups = ApiVersion.ApiV2.class)
+    private String phoneNumber;
 
     public String getName() {
         return name;
@@ -23,4 +25,11 @@ public class PersonDto {
         this.age = age;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
