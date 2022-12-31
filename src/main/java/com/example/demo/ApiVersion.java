@@ -7,13 +7,15 @@ import java.util.regex.Pattern;
 public enum ApiVersion {
     v1(ApiV1.class),
     v2(ApiV2.class),
-    v3(ApiV3.class);
+    v3(ApiV3.class),
+    v4(ApiV4.class);
 
     public interface ApiVersionGroup {};
 
     public interface ApiV1 extends ApiVersionGroup {}
     public interface ApiV2  extends ApiVersionGroup {}
     public interface ApiV3  extends ApiVersionGroup {}
+    public interface ApiV4  extends ApiVersionGroup {}
     private final Class<? extends ApiVersionGroup> apiVersionGroup;
 
     ApiVersion(Class<? extends ApiVersionGroup> apiVersionGroup) {

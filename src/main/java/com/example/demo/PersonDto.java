@@ -14,7 +14,7 @@ public class PersonDto {
     private String phoneNumber;
     @NotNull(groups = ApiVersion.ApiV3.class)
     private String country;
-    @NotNullVersioned
+    @NotNullVersioned(addedInVersion = ApiVersion.v4)
     private String creditCardNumber;
 
     public String getName() {

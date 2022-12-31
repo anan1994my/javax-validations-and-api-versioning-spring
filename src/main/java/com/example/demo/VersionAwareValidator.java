@@ -1,8 +1,10 @@
 package com.example.demo;
 
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.util.Set;
@@ -13,8 +15,8 @@ public class VersionAwareValidator {
     @Autowired
     private Validator validator;
 
-
     public void validate(ApiVersion apiVersion, PersonDto personDto) {
+        MDC.put("version", apiVersion.name());
         Set<ConstraintViolation<PersonDto>> res = validator.validate(personDto);
         if (!res.isEmpty()) {
             ConstraintViolation<PersonDto> violation = res.iterator().next();
@@ -30,5 +32,7 @@ public class VersionAwareValidator {
                 throw new IllegalArgumentException(message);
             }
         }
+
+
     }
 }
