@@ -1,5 +1,7 @@
 package com.example.demo;
 
+import com.example.demo.validation.NotNullVersioned;
+
 import javax.validation.constraints.NotNull;
 
 public class PersonDto {
@@ -10,9 +12,10 @@ public class PersonDto {
     private Integer age;
     @NotNull(groups = ApiVersion.ApiV2.class) // means that on v1 empty phoneNumber is Ok but on v2 should be rejected
     private String phoneNumber;
-
     @NotNull(groups = ApiVersion.ApiV3.class)
     private String country;
+    @NotNullVersioned
+    private String creditCardNumber;
 
     public String getName() {
         return name;
@@ -42,5 +45,13 @@ public class PersonDto {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getCreditCardNumber() {
+        return creditCardNumber;
+    }
+
+    public void setCreditCardNumber(String creditCardNumber) {
+        this.creditCardNumber = creditCardNumber;
     }
 }
