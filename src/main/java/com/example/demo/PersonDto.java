@@ -8,8 +8,11 @@ public class PersonDto {
     private String name;
     @NotNull
     private Integer age;
-    @NotNull(groups = ApiVersion.ApiV2.class)
+    @NotNull(groups = ApiVersion.ApiV2.class) // means that on v1 empty phoneNumber is Ok but on v2 should be rejected
     private String phoneNumber;
+
+    @NotNull(groups = ApiVersion.ApiV3.class)
+    private String country;
 
     public String getName() {
         return name;
@@ -31,5 +34,13 @@ public class PersonDto {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

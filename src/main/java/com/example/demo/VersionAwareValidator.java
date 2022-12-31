@@ -15,11 +15,20 @@ public class VersionAwareValidator {
 
 
     public void validate(ApiVersion apiVersion, PersonDto personDto) {
-        final Set<ConstraintViolation<PersonDto>> res = validator.validate(personDto);
+        Set<ConstraintViolation<PersonDto>> res = validator.validate(personDto);
         if (!res.isEmpty()) {
             ConstraintViolation<PersonDto> violation = res.iterator().next();
             String message = violation.getPropertyPath() + ": " + violation.getMessage();
             throw new IllegalArgumentException(message);
+        }
+        ApiVersion[] targetApiGroups = apiVersion.getTargetApiGroups();
+        for (ApiVersion targetApiGroup : targetApiGroups) {
+            res = validator.validate(personDto, targetApiGroup.getApiVersionGroup());
+            if (!res.isEmpty()) {
+                ConstraintViolation<PersonDto> violation = res.iterator().next();
+                String message = violation.getPropertyPath() + ": " + violation.getMessage();
+                throw new IllegalArgumentException(message);
+            }
         }
     }
 }
