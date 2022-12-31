@@ -26,9 +26,9 @@ public class NotNullVersionedValidator implements ConstraintValidator<NotNullVer
                     .unwrap(HibernateConstraintValidatorContext.class)
                     .getConstraintValidatorPayload(String.class);
             ApiVersion requestApiVersion = ApiVersion.valueOf(payload);
+            // skip validation in old version
+            if (requestApiVersion.ordinal() < addedInVersion.ordinal()) return true;
         }
-        // skip validation in old version
-//        if (requestVersion.ordinal() < addedInVersion.ordinal()) return true;
         return false;
     }
 }
