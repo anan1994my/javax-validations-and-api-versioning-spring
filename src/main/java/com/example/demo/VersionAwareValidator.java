@@ -14,22 +14,25 @@ public class VersionAwareValidator {
     private ValidatorsFactory validatorsFactory;
 
     public void validate(ApiVersion apiVersion, PersonDto personDto) {
-//        MDC.put("version", apiVersion.name());
         Validator validator = validatorsFactory.resolveValidator(apiVersion);
+        // perform javax validation manually
         Set<ConstraintViolation<PersonDto>> res = validator.validate(personDto);
         if (!res.isEmpty()) {
-            ConstraintViolation<PersonDto> violation = res.iterator().next();
-            String message = violation.getPropertyPath() + ": " + violation.getMessage();
-            throw new IllegalArgumentException(message);
+            throwError(res, null);
         }
         ApiVersion[] targetApiGroups = apiVersion.getTargetApiGroups();
         for (ApiVersion targetApiGroup : targetApiGroups) {
             res = validator.validate(personDto, targetApiGroup.getApiVersionGroup());
             if (!res.isEmpty()) {
-                ConstraintViolation<PersonDto> violation = res.iterator().next();
-                String message = violation.getPropertyPath() + ": " + violation.getMessage();
-                throw new IllegalArgumentException(message);
+                throwError(res, targetApiGroup);
             }
         }
+    }
+
+    private static void throwError(Set<ConstraintViolation<PersonDto>> res, ApiVersion apiVersion) {
+        ConstraintViolation<PersonDto> violation = res.iterator().next();
+        String message = violation.getPropertyPath() + ": " + violation.getMessage()
+                + (apiVersion != null ? " ( in " + apiVersion.name() + ")" : "");
+        throw new IllegalArgumentException(message);
     }
 }

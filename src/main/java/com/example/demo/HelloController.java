@@ -15,7 +15,6 @@ public class HelloController {
 	public Object post(@RequestBody PersonDto personDto,
 					   @RequestHeader(HttpHeaders.CONTENT_TYPE) String contentType) {
 		ApiVersion apiVersion = ApiVersion.fromHeader(contentType);
-		System.out.println("Api version: " + apiVersion);
 		versionAwareValidator.validate(apiVersion, personDto);
 		return personDto;
 	}
