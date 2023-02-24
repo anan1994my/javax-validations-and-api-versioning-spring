@@ -25,6 +25,8 @@ public @interface NotNullVersioned {
 
     ApiVersion addedInVersion();
 
+    ApiVersion removedInVersion();
+
     @Target({ElementType.FIELD})
     @Retention(RetentionPolicy.RUNTIME)
     @Documented

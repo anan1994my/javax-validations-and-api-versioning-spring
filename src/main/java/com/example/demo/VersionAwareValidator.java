@@ -13,14 +13,19 @@ public class VersionAwareValidator {
     @Autowired
     private ValidatorsFactory validatorsFactory;
 
+    public VersionAwareValidator(ValidatorsFactory validatorsFactory) {
+        this.validatorsFactory = validatorsFactory;
+    }
+
     public void validate(ApiVersion apiVersion, PersonDto personDto) {
         Validator validator = validatorsFactory.resolveValidator(apiVersion);
-        // perform javax validation manually
+        // perform javax validation; includes NotNullVersionedValidator
         Set<ConstraintViolation<PersonDto>> res = validator.validate(personDto);
         if (!res.isEmpty()) {
             throwError(res, null);
         }
-        ApiVersion[] targetApiGroups = apiVersion.getTargetApiGroups();
+        // javax validation with annotation groups
+        ApiVersion[] targetApiGroups = apiVersion.getTargetApiVersions();
         for (ApiVersion targetApiGroup : targetApiGroups) {
             res = validator.validate(personDto, targetApiGroup.getApiVersionGroup());
             if (!res.isEmpty()) {
